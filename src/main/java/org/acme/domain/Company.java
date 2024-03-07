@@ -22,6 +22,37 @@ public class Company {
     private long VAT;
     private String address;
 
+    public int getCompanyID() {
+        return companyID;
+    }
+
+    public void setCompanyID(int companyID) {
+        this.companyID = companyID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public long getVAT() {
+        return VAT;
+    }
+
+    public void setVAT(long VAT) {
+        this.VAT = VAT;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     @Override
     public String toString() {
