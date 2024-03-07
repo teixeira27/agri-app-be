@@ -23,6 +23,46 @@ public class Field {
     private String coordinates;
     private String localization;
 
+    public int getFieldID() {
+        return fieldID;
+    }
+
+    public void setFieldID(int fieldID) {
+        this.fieldID = fieldID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getArea() {
+        return area;
+    }
+
+    public void setArea(int area) {
+        this.area = area;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public String getLocalization() {
+        return localization;
+    }
+
+    public void setLocalization(String localization) {
+        this.localization = localization;
+    }
+
     @Override
     public String toString() {
         return "Field{" +

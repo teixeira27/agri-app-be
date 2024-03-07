@@ -1,0 +1,46 @@
+package org.acme.controller;
+
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import org.acme.dto.CompanyDTO;
+import org.acme.service.CompanyService;
+import java.util.List;
+
+@Path("company")
+public class CompanyController {
+    private final CompanyService companyService;
+
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CompanyDTO> listAllCompanies(){
+        return companyService.listAllCompanies();
+    }
+
+    @GET
+    @Path("/save")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String saveCompanies(){
+        return companyService.save();
+    }
+
+    @GET
+    @Path("{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String listById (@PathParam("id") Integer id){
+        return companyService.findById(id).toString();
+    }
+
+    @GET
+    @Path("delete/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String deleteById(@PathParam("id") Integer id){
+        return companyService.deleteById(id);
+    }
+}
