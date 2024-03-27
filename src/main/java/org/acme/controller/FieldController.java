@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -11,11 +12,9 @@ import java.util.List;
 
 @Path("field")
 public class FieldController {
-    private final FieldService fieldService;
 
-    public FieldController(FieldService fieldService) {
-        this.fieldService = fieldService;
-    }
+    @Inject
+    FieldService fieldService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

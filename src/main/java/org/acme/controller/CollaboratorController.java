@@ -1,5 +1,7 @@
 package org.acme.controller;
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.dto.CollaboratorDTO;
@@ -8,14 +10,13 @@ import java.util.List;
 
 @Path("collaborator")
 public class CollaboratorController {
-    private final CollaboratorService collaboratorService;
 
-    public CollaboratorController(CollaboratorService collaboratorService) {
-        this.collaboratorService = collaboratorService;
-    }
+    @Inject
+    CollaboratorService collaboratorService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("USER")
     public List<CollaboratorDTO> listAllCollaborators(){
         return collaboratorService.listAllCollaborators();
     }

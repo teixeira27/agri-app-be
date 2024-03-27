@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -12,11 +13,8 @@ import java.util.List;
 
 public class ProductController {
 
-    private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    @Inject
+    ProductService productService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

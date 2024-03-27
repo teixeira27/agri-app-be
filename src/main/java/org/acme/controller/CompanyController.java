@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -11,11 +12,8 @@ import java.util.List;
 
 @Path("company")
 public class CompanyController {
-    private final CompanyService companyService;
-
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
-    }
+    @Inject
+    CompanyService companyService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

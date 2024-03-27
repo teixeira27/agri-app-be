@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -13,11 +14,8 @@ import java.util.List;
 @Path("treatment")
 public class TreatmentController {
 
-    final private TreatmentService treatmentService;
-
-    public TreatmentController(TreatmentService treatmentService) {
-        this.treatmentService = treatmentService;
-    }
+    @Inject
+    TreatmentService treatmentService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
