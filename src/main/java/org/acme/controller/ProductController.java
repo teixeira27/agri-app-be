@@ -1,5 +1,7 @@
 package org.acme.controller;
 
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -12,13 +14,11 @@ import java.util.List;
 
 public class ProductController {
 
-    private final ProductService productService;
-
-    public ProductController(ProductService productService) {
-        this.productService = productService;
-    }
+    @Inject
+    ProductService productService;
 
     @GET
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public List<ProductDTO> listAllFields(){
         return productService.listAllFields();
@@ -26,6 +26,7 @@ public class ProductController {
 
     @GET
     @Path("/save")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveFields(){
         return productService.save();
@@ -33,6 +34,7 @@ public class ProductController {
 
     @GET
     @Path("{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String listById (@PathParam("id") Integer id){
         return productService.findById(id).toString();
@@ -40,6 +42,7 @@ public class ProductController {
 
     @GET
     @Path("delete/{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id){
         return productService.deleteById(id);

@@ -1,13 +1,13 @@
 package org.acme.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="treatment")
 public class Treatment {
@@ -18,30 +18,6 @@ public class Treatment {
     @Transient
     private Product product;
     private String description;
-
-    public int getTreatmentID() {
-        return treatmentID;
-    }
-
-    public void setTreatmentID(int treatmentID) {
-        this.treatmentID = treatmentID;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Override
     public String toString() {

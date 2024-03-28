@@ -1,0 +1,56 @@
+package authentication.service;
+
+import authentication.model.Auth;
+import authentication.repository.AuthRepository;
+import authentication.utils.JwtUtils;
+import io.quarkus.elytron.security.common.BcryptUtil;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+
+@ApplicationScoped
+public class AuthService {
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    @Inject
+    AuthRepository authRepository;
+
+    @Transactional
+    public String createAuth (String username, String password) throws Exception {
+        Auth user = findByUsername(username);
+        if (user == null){
+            Auth auth = Auth.builder()
+                    .username(username)
+                    .password(BcryptUtil.bcryptHash(password))
+                    .build();
+            authRepository.save(auth);
+            BcryptUtil.bcryptHash(password);
+            return JwtUtils.generateToken(username);
+        }
+        else throw new EntityNotFoundException("User already exist!");
+    }
+
+    public String authenticate (String username, String password) throws Exception {
+        Auth user = findByUsername(username);
+        if (user != null && BcryptUtil.matches(password,user.getPassword())){
+            return JwtUtils.generateToken(username);
+        }
+        else throw new EntityNotFoundException("User doesn't exist!");
+    }
+
+    private Auth findByUsername(String username) {
+        try {
+            return entityManager.createQuery("SELECT u FROM auth u WHERE u.username = :username", Auth.class)
+                    .setParameter("username", username)
+                    .getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+}

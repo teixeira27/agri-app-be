@@ -4,14 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name="field")
 public class Field {
@@ -22,46 +22,6 @@ public class Field {
     private int area;
     private String coordinates;
     private String localization;
-
-    public int getFieldID() {
-        return fieldID;
-    }
-
-    public void setFieldID(int fieldID) {
-        this.fieldID = fieldID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getArea() {
-        return area;
-    }
-
-    public void setArea(int area) {
-        this.area = area;
-    }
-
-    public String getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(String coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public String getLocalization() {
-        return localization;
-    }
-
-    public void setLocalization(String localization) {
-        this.localization = localization;
-    }
 
     @Override
     public String toString() {
