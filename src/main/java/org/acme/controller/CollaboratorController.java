@@ -23,6 +23,7 @@ public class CollaboratorController {
 
     @GET
     @Path("/save")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveCollaborators(){
         return collaboratorService.save();
@@ -30,6 +31,7 @@ public class CollaboratorController {
 
     @GET
     @Path("{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String listById (@PathParam("id") Integer id){
         return collaboratorService.findById(id).toString();
@@ -37,6 +39,8 @@ public class CollaboratorController {
 
     @GET
     @Path("delete/{id}")
+    @RolesAllowed("USER")
+
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id){
         return collaboratorService.deleteById(id);

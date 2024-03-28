@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -16,6 +17,7 @@ public class CompanyController {
     CompanyService companyService;
 
     @GET
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public List<CompanyDTO> listAllCompanies(){
         return companyService.listAllCompanies();
@@ -23,6 +25,7 @@ public class CompanyController {
 
     @GET
     @Path("/save")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveCompanies(){
         return companyService.save();
@@ -30,6 +33,7 @@ public class CompanyController {
 
     @GET
     @Path("{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String listById (@PathParam("id") Integer id){
         return companyService.findById(id).toString();
@@ -37,6 +41,7 @@ public class CompanyController {
 
     @GET
     @Path("delete/{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id){
         return companyService.deleteById(id);

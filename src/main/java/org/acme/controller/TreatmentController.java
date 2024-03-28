@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -18,12 +19,14 @@ public class TreatmentController {
     TreatmentService treatmentService;
 
     @GET
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public List<TreatmentDTO> listAllFields(){
         return treatmentService.listAllTreatments();
     }
 
     @GET
+    @RolesAllowed("USER")
     @Path("/save")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveFields(){
@@ -31,6 +34,7 @@ public class TreatmentController {
     }
 
     @GET
+    @RolesAllowed("USER")
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public String listById (@PathParam("id") Integer id){
@@ -39,6 +43,7 @@ public class TreatmentController {
 
     @GET
     @Path("delete/{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id){
         return treatmentService.deleteById(id);

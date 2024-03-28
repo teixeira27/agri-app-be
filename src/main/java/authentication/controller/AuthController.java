@@ -4,6 +4,7 @@ import authentication.service.AuthService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 @Path("auth")
 public class AuthController {
@@ -14,9 +15,30 @@ public class AuthController {
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public String authenticate (@FormParam("username") String username,
-                                @FormParam("password")String password) throws Exception {
+    public Response authenticate (@FormParam("username") String username,
+                                  @FormParam("password")String password) {
 
-        return authService.authenticate(username,password);
+        try{
+            String authToken = authService.authenticate(username,password);
+            return Response.ok(authToken).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
     }
+
+    @POST
+    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Path("/sign-in")
+    public Response createAuth (@FormParam("username") String username,
+                              @FormParam("password")String password) {
+        try{
+            String authToken = authService.createAuth(username,password);
+            return Response.ok(authToken).build();
+        }catch (Exception e){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+
+    }
+
 }

@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -17,6 +18,7 @@ public class FieldController {
     FieldService fieldService;
 
     @GET
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public List<FieldDTO> listAllFields(){
         return fieldService.listAllFields();
@@ -24,6 +26,7 @@ public class FieldController {
 
     @GET
     @Path("/save")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveFields(){
         return fieldService.save();
@@ -31,6 +34,7 @@ public class FieldController {
 
     @GET
     @Path("{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String listById (@PathParam("id") Integer id){
         return fieldService.findById(id).toString();
@@ -38,6 +42,7 @@ public class FieldController {
 
     @GET
     @Path("delete/{id}")
+    @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id){
         return fieldService.deleteById(id);
