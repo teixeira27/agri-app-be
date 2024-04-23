@@ -31,10 +31,10 @@ public class AuthController {
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @Path("/register")
-    public Response createAuth (@FormParam("username") String username,
+    public Response createAuth (@FormParam("email") String email,
                               @FormParam("password")String password) {
         try{
-            String authToken = authService.createAuth(username,password);
+            String authToken = authService.createAuth(email,password);
             return Response.ok(authToken).build();
         }catch (Exception e){
             return Response.status(Response.Status.UNAUTHORIZED).build();

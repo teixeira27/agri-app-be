@@ -23,7 +23,7 @@ public class AuthService {
 
     @Transactional
     public String createAuth (String email, String password) throws Exception {
-        Auth user = findByUsername(email);
+        Auth user = findByEmail(email);
         if (user == null){
             Auth auth = Auth.builder()
                     .email(email)
@@ -37,16 +37,16 @@ public class AuthService {
     }
 
     public String authenticate (String email, String password) throws Exception {
-        Auth user = findByUsername(email);
+        Auth user = findByEmail(email);
         if (user != null && BcryptUtil.matches(password,user.getPassword())){
             return JwtUtils.generateToken(email);
         }
         else throw new EntityNotFoundException("User doesn't exist!");
     }
 
-    private Auth findByUsername(String email) {
+    private Auth findByEmail(String email) {
         try {
-            return entityManager.createQuery("SELECT u FROM auth u WHERE u.email = :email", Auth.class)
+            return entityManager.createQuery("SELECT u FROM Auth u WHERE u.email = :email", Auth.class)
                     .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException ex) {

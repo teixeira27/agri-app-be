@@ -28,7 +28,7 @@ public class LandService {
         final Land land = landRepository.findById(id)
                 .orElseThrow( ()-> new EntityNotFoundException("Land not found."));
         return FieldDTO.builder()
-                .fieldID(land.getFieldID())
+                .fieldID(land.getLandID())
                 .name(land.getName())
                 .area(land.getArea())
                 .coordinates(land.getCoordinates())
@@ -41,7 +41,7 @@ public class LandService {
                 .stream()
                 .map(land -> FieldDTO
                         .builder()
-                        .fieldID(land.getFieldID())
+                        .fieldID(land.getLandID())
                         .name(land.getName())
                         .area(land.getArea())
                         .coordinates(land.getCoordinates())

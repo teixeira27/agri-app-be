@@ -15,15 +15,16 @@ import lombok.*;
 public class Collaborator {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "collaborator_seq")
+    @SequenceGenerator(name = "collaborator_seq", sequenceName = "db.collaborator_seq", allocationSize = 1)
     private Integer collaboratorID;
 
     private String name;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "companyID")
     private Company company;
 
     private String role;
 
-    //um collab apenas pode ter uma empresa
 }

@@ -14,7 +14,8 @@ import java.util.List;
 public class Company {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
+    @SequenceGenerator(name = "company_seq", sequenceName = "db.company_seq", allocationSize = 1)
     private Integer companyID;
 
     private String name;
@@ -23,7 +24,9 @@ public class Company {
 
     private int pin;
 
-    @OneToMany
+    @OneToMany(mappedBy = "company")
     private List<Collaborator> collaborators;
-    //uma empresa pode ter vários colabs
+
+    @OneToMany(mappedBy = "company")
+    private List<Land> lands;
 }

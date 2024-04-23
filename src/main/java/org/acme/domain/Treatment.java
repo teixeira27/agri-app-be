@@ -3,6 +3,8 @@ package org.acme.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Date;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,16 +14,19 @@ import lombok.*;
 @Table(name="treatment")
 public class Treatment {
 
-    @GeneratedValue
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "treatment_seq")
+    @SequenceGenerator(name = "treatment_seq", sequenceName = "db.treatment_seq", allocationSize = 1)
     private Integer treatmentID;
 
-    @Transient
+    @OneToOne
     private Product product;
 
     private String description;
-    // private Date - nao pode ser maior que currentDate
-    // private security Days - intervalo de segurança para colheita
+
+    private Date date;  //nao pode ser maior que currentDate
+
+    private Integer securityDays;
 
     // historico de estados de uma cultura
     // sempre que se der update numa cultura é adicionado ao historico também

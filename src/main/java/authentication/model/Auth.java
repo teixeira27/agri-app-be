@@ -1,8 +1,6 @@
 package authentication.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
@@ -10,11 +8,13 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity(name = "auth")
+@Entity
+@Table(name="authentication")
 public class Auth {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authorization_seq")
+    @SequenceGenerator(name = "authorization_seq", sequenceName = "db.authorization_seq", allocationSize = 1)
     private Integer id;
     public String email;
     public String password;
