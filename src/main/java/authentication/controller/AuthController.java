@@ -15,11 +15,12 @@ public class AuthController {
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response authenticate (@FormParam("username") String username,
+    @Path("/login")
+    public Response authenticate (@FormParam("email") String email,
                                   @FormParam("password")String password) {
 
         try{
-            String authToken = authService.authenticate(username,password);
+            String authToken = authService.authenticate(email,password);
             return Response.ok(authToken).build();
         }catch (Exception e){
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -29,7 +30,7 @@ public class AuthController {
     @POST
     @Produces(MediaType.TEXT_PLAIN)
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    @Path("/sign-in")
+    @Path("/register")
     public Response createAuth (@FormParam("username") String username,
                               @FormParam("password")String password) {
         try{
@@ -38,7 +39,22 @@ public class AuthController {
         }catch (Exception e){
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
-
     }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/save")
+    public Response save () {
+        try{
+            authService.createAuth("ines@gmail.com","ines");
+            authService.createAuth("diogo@gmail.com","diogo");
+            return Response.ok("SAVED!").build();
+        }catch (Exception e){
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
+
+    // change password
+
 
 }

@@ -1,9 +1,6 @@
 package org.acme.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
@@ -17,20 +14,13 @@ public class Product {
 
     @GeneratedValue
     @Id
-    private int productID;
-    private String name;
-    private String safetyPeriod;
-    private String description;
-    private String type;
+    private Integer productID;
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "productID=" + productID +
-                ", name='" + name + '\'' +
-                ", safetyPeriod='" + safetyPeriod + '\'' +
-                ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
-                '}';
-    }
+    private String name;
+
+    private String safetyPeriod;
+
+    private String description;
+
+    private String type;
 }

@@ -18,7 +18,6 @@ public class CompanyService {
         companyRepository.save(Company.builder()
                 .name(companyDTO.getName())
                 .VAT(companyDTO.getVAT())
-                .address(companyDTO.getAddress())
                 .build());
         return "Company created successfully.";
     }
@@ -29,7 +28,6 @@ public class CompanyService {
                 .companyID(company.getCompanyID())
                 .name(company.getName())
                 .VAT(company.getVAT())
-                .address(company.getAddress())
                 .build();
     }
 
@@ -41,7 +39,6 @@ public class CompanyService {
                         .companyID(company.getCompanyID())
                         .name(company.getName())
                         .VAT(company.getVAT())
-                        .address(company.getAddress())
                         .build())
                 .toList();
     }
@@ -52,10 +49,10 @@ public class CompanyService {
     }
 
     public String save (){
-        companyRepository.save(Company.builder().name("Efacec").VAT(123).address("bbb").build());
-        companyRepository.save(Company.builder().name("NOS").VAT(312).address("aaa").build());
-        companyRepository.save(Company.builder().name("GALP").VAT(321).address("sss").build());
-        companyRepository.save(Company.builder().name("EDP").VAT(213).address("zzz").build());
+        companyRepository.save(Company.builder().name("Efacec").VAT(123).build());
+        companyRepository.save(Company.builder().name("NOS").VAT(312).build());
+        companyRepository.save(Company.builder().name("GALP").VAT(321).build());
+        companyRepository.save(Company.builder().name("EDP").VAT(213).build());
         return "Companies saved successfully";
     }
 }

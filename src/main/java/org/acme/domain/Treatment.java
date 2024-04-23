@@ -14,17 +14,15 @@ public class Treatment {
 
     @GeneratedValue
     @Id
-    private int treatmentID;
+    private Integer treatmentID;
+
     @Transient
     private Product product;
-    private String description;
 
-    @Override
-    public String toString() {
-        return "Treatment{" +
-                "treatmentID=" + treatmentID +
-                ", product=" + product +
-                ", description='" + description + '\'' +
-                '}';
-    }
+    private String description;
+    // private Date - nao pode ser maior que currentDate
+    // private security Days - intervalo de segurança para colheita
+
+    // historico de estados de uma cultura
+    // sempre que se der update numa cultura é adicionado ao historico também
 }

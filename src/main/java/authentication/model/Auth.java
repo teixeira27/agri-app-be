@@ -16,6 +16,6 @@ public class Auth {
     @Id
     @GeneratedValue
     private Integer id;
-    public String username;
+    public String email;
     public String password;
 }

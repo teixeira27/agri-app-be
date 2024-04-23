@@ -1,10 +1,7 @@
 package org.acme.domain;
 
 import io.quarkus.security.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Builder
@@ -17,20 +14,16 @@ import lombok.*;
 @Table(name="collaborator")
 public class Collaborator {
 
-    @GeneratedValue
     @Id
-    private int collaboratorID;
-    private String username;
-    private String password;
+    @GeneratedValue
+    private Integer collaboratorID;
+
     private String name;
+
+    @OneToOne
+    private Company company;
+
     private String role;
 
-    @Override
-    public String toString() {
-        return "Collaborator{" +
-                "collaboratorID=" + collaboratorID +
-                ", name='" + name + '\'' +
-                ", role='" + role + '\'' +
-                '}';
-    }
+    //um collab apenas pode ter uma empresa
 }

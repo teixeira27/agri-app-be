@@ -8,20 +8,20 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import org.acme.dto.FieldDTO;
-import org.acme.service.FieldService;
+import org.acme.service.LandService;
 import java.util.List;
 
 @Path("field")
 public class FieldController {
 
     @Inject
-    FieldService fieldService;
+    LandService landService;
 
     @GET
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public List<FieldDTO> listAllFields(){
-        return fieldService.listAllFields();
+        return landService.listAllFields();
     }
 
     @GET
@@ -29,7 +29,7 @@ public class FieldController {
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String saveFields(){
-        return fieldService.save();
+        return landService.save();
     }
 
     @GET
@@ -37,7 +37,7 @@ public class FieldController {
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String listById (@PathParam("id") Integer id){
-        return fieldService.findById(id).toString();
+        return landService.findById(id).toString();
     }
 
     @GET
@@ -45,6 +45,14 @@ public class FieldController {
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id){
-        return fieldService.deleteById(id);
+        return landService.deleteById(id);
     }
+
+    //show all lands by user
+
+    //create cultures
+    //show all cultures by land
+
+    //how to store photos
+
 }

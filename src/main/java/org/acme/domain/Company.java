@@ -1,10 +1,8 @@
 package org.acme.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -17,18 +15,15 @@ public class Company {
 
     @Id
     @GeneratedValue
-    private int companyID;
-    private String name;
-    private long VAT;
-    private String address;
+    private Integer companyID;
 
-    @Override
-    public String toString() {
-        return "Company{" +
-                "companyID=" + companyID +
-                ", name='" + name + '\'' +
-                ", VAT=" + VAT +
-                ", address='" + address + '\'' +
-                '}';
-    }
+    private String name;
+
+    private long VAT;
+
+    private int pin;
+
+    @OneToMany
+    private List<Collaborator> collaborators;
+    //uma empresa pode ter vários colabs
 }

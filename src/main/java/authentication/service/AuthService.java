@@ -22,32 +22,32 @@ public class AuthService {
     AuthRepository authRepository;
 
     @Transactional
-    public String createAuth (String username, String password) throws Exception {
-        Auth user = findByUsername(username);
+    public String createAuth (String email, String password) throws Exception {
+        Auth user = findByUsername(email);
         if (user == null){
             Auth auth = Auth.builder()
-                    .username(username)
+                    .email(email)
                     .password(BcryptUtil.bcryptHash(password))
                     .build();
             authRepository.save(auth);
             BcryptUtil.bcryptHash(password);
-            return JwtUtils.generateToken(username);
+            return JwtUtils.generateToken(email);
         }
         else throw new EntityNotFoundException("User already exist!");
     }
 
-    public String authenticate (String username, String password) throws Exception {
-        Auth user = findByUsername(username);
+    public String authenticate (String email, String password) throws Exception {
+        Auth user = findByUsername(email);
         if (user != null && BcryptUtil.matches(password,user.getPassword())){
-            return JwtUtils.generateToken(username);
+            return JwtUtils.generateToken(email);
         }
         else throw new EntityNotFoundException("User doesn't exist!");
     }
 
-    private Auth findByUsername(String username) {
+    private Auth findByUsername(String email) {
         try {
-            return entityManager.createQuery("SELECT u FROM auth u WHERE u.username = :username", Auth.class)
-                    .setParameter("username", username)
+            return entityManager.createQuery("SELECT u FROM auth u WHERE u.email = :email", Auth.class)
+                    .setParameter("email", email)
                     .getSingleResult();
         } catch (NoResultException ex) {
             return null;

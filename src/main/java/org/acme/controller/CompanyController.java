@@ -46,4 +46,6 @@ public class CompanyController {
     public String deleteById(@PathParam("id") Integer id){
         return companyService.deleteById(id);
     }
+
+    //create company, join company
 }
