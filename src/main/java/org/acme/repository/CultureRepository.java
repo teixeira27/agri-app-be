@@ -1,12 +1,12 @@
 package org.acme.repository;
 
-import org.acme.domain.Land;
+import org.acme.domain.Culture;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface LandRepository extends JpaRepository<Land, Integer> {
-    List<Land> findByCompany_CompanyId(Integer companyId);
+public interface CultureRepository extends JpaRepository<Culture, Integer> {
+    List<Culture> findByLand_LandId(Integer landId);
 }

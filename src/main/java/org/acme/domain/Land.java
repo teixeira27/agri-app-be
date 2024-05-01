@@ -3,28 +3,31 @@ package org.acme.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name="land")
-public class Land {
+@Table(name = "land")
+public class Land implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "land_seq")
     @SequenceGenerator(name = "land_seq", sequenceName = "db.land_seq", allocationSize = 1)
-    private Integer landID;
+    private Integer landId;
 
     private String name;
-
     private int area;
-
     private String coordinates;
-
     private String localization;
 
-    @ManyToOne
-    @JoinColumn(name = "companyID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "companyId")
     private Company company;
+
+    @OneToMany(mappedBy = "land", fetch = FetchType.EAGER)
+    private List<Culture> cultures;
 }

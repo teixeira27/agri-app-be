@@ -1,4 +1,4 @@
-package authentication.model;
+package authentication.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,13 +9,13 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name="authentication")
+@Table(name = "authentication")
 public class Auth {
 
+    public String email;
+    public String password;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "authorization_seq")
     @SequenceGenerator(name = "authorization_seq", sequenceName = "db.authorization_seq", allocationSize = 1)
     private Integer id;
-    public String email;
-    public String password;
 }

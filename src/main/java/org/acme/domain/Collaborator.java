@@ -4,6 +4,8 @@ import io.quarkus.security.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,18 +13,18 @@ import lombok.*;
 @Setter
 @User
 @Entity
-@Table(name="collaborator")
-public class Collaborator {
+@Table(name = "collaborator")
+public class Collaborator implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "collaborator_seq")
     @SequenceGenerator(name = "collaborator_seq", sequenceName = "db.collaborator_seq", allocationSize = 1)
-    private Integer collaboratorID;
+    private Integer collaboratorId;
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "companyID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "companyId")
     private Company company;
 
     private String role;

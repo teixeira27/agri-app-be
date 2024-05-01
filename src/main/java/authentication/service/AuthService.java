@@ -1,6 +1,6 @@
 package authentication.service;
 
-import authentication.model.Auth;
+import authentication.domain.Auth;
 import authentication.repository.AuthRepository;
 import authentication.utils.JwtUtils;
 import io.quarkus.elytron.security.common.BcryptUtil;
@@ -15,33 +15,30 @@ import jakarta.transaction.Transactional;
 @ApplicationScoped
 public class AuthService {
 
+    @Inject
+    AuthRepository authRepository;
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Inject
-    AuthRepository authRepository;
-
     @Transactional
-    public String createAuth (String email, String password) throws Exception {
+    public String createAuth(String email, String password) {
         Auth user = findByEmail(email);
-        if (user == null){
+        if (user == null) {
             Auth auth = Auth.builder()
                     .email(email)
                     .password(BcryptUtil.bcryptHash(password))
                     .build();
             authRepository.save(auth);
             BcryptUtil.bcryptHash(password);
-            return JwtUtils.generateToken(email);
-        }
-        else throw new EntityNotFoundException("User already exist!");
+            return "Registration successful, now please log in!";
+        } else throw new EntityNotFoundException("User already exist!");
     }
 
-    public String authenticate (String email, String password) throws Exception {
+    public String authenticate(String email, String password) throws Exception {
         Auth user = findByEmail(email);
-        if (user != null && BcryptUtil.matches(password,user.getPassword())){
+        if (user != null && BcryptUtil.matches(password, user.getPassword())) {
             return JwtUtils.generateToken(email);
-        }
-        else throw new EntityNotFoundException("User doesn't exist!");
+        } else throw new EntityNotFoundException("User doesn't exist!");
     }
 
     private Auth findByEmail(String email) {

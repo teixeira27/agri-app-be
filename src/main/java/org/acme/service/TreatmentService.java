@@ -3,58 +3,70 @@ package org.acme.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.acme.domain.Culture;
 import org.acme.domain.Product;
 import org.acme.domain.Treatment;
-import org.acme.dto.TreatmentDTO;
+import org.acme.dto.inbound.TreatmentCreationDTO;
+import org.acme.dto.outbound.TreatmentInfoDTO;
+import org.acme.repository.CultureRepository;
+import org.acme.repository.ProductRepository;
 import org.acme.repository.TreatmentRepository;
 
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class TreatmentService {
     @Inject
     TreatmentRepository treatmentRepository;
+    @Inject
+    CultureRepository cultureRepository;
 
-    public String createTreatment (TreatmentDTO treatmentDTO){
-        treatmentRepository.save(Treatment.builder()
-                .product(treatmentDTO.getProduct())
-                .description(treatmentDTO.getDescription())
-                .build());
-        return "Treatment saved successfully.";
-    }
+    @Inject
+    ProductRepository productRepository;
 
-    public TreatmentDTO findById (Integer id){
-        final Treatment treatment = treatmentRepository.findById(id)
-                .orElseThrow( ()-> new EntityNotFoundException("Treatment not found."));
-        return TreatmentDTO.builder()
-                .treatmentID(treatment.getTreatmentID())
-                .product(treatment.getProduct())
-                .description(treatment.getDescription())
+    @Transactional
+    public Integer createTreatment(TreatmentCreationDTO treatmentCreationDTO) {
+        Optional<Culture> culture = this.cultureRepository.findById(treatmentCreationDTO.getCultureId());
+        if (culture.isEmpty()) throw new EntityNotFoundException("Culture not found!");
+
+        Product product = Product.builder().name(treatmentCreationDTO.getProductName()).build();
+        this.productRepository.save(product);
+
+        Treatment treatment = Treatment.builder()
+                .product(product)
+                .description(treatmentCreationDTO.getDescription())
+                .date(Date.from(Instant.now()))
+                .securityDays(treatmentCreationDTO.getSecurityDays())
+                .culture(culture.get())
                 .build();
+        this.treatmentRepository.save(treatment);
+        return treatment.getTreatmentId();
     }
 
-    public List<TreatmentDTO> listAllTreatments(){
-        return treatmentRepository.findAll()
-                .stream()
-                .map(treatment -> TreatmentDTO
-                        .builder()
-                        .treatmentID(treatment.getTreatmentID())
-                        .product(treatment.getProduct())
-                        .description(treatment.getDescription())
-                        .build())
-                .toList();
+    public List<TreatmentInfoDTO> getAllTreatmentsByCulture(Integer cultureId) {
+        List<Treatment> treatments = this.treatmentRepository.findByCulture_CultureId(cultureId);
+        List<TreatmentInfoDTO> treatmentInfoDTOS = new ArrayList<>();
+
+        for (Treatment treatment : treatments) {
+            TreatmentInfoDTO treatmentInfoDTO = TreatmentInfoDTO.builder()
+                    .treatmentId(treatment.getTreatmentId())
+                    .productName(treatment.getProduct().getName())
+                    .date(treatment.getDate())
+                    .description(treatment.getDescription())
+                    .securityDays(treatment.getSecurityDays())
+                    .build();
+            treatmentInfoDTOS.add(treatmentInfoDTO);
+        }
+        return treatmentInfoDTOS;
     }
 
-    public String deleteById (Integer id){
+    public String deleteById(Integer id) {
         treatmentRepository.deleteById(id);
         return ("Treatment deleted successfully.");
-    }
-
-    public String save (){
-        treatmentRepository.save(Treatment.builder().product(new Product()).description("bbb").build());
-        treatmentRepository.save(Treatment.builder().product(new Product()).description("zzz").build());
-        treatmentRepository.save(Treatment.builder().product(new Product()).description("sss").build());
-        treatmentRepository.save(Treatment.builder().product(new Product()).description("xxx").build());
-        return "Treatments saved successfully";
     }
 }

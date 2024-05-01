@@ -1,4 +1,4 @@
-package org.acme.dto;
+package org.acme.dto.inbound;
 
 import lombok.*;
 
@@ -8,9 +8,9 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CompanyDTO {
-    private int companyID;
+public class CompanyCreationDTO {
     private String name;
     private long VAT;
-    private String address;
+    private int pin;
+    private Integer collaboratorId;
 }

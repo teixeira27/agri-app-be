@@ -3,63 +3,58 @@ package org.acme.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.acme.domain.Company;
 import org.acme.domain.Land;
-import org.acme.dto.FieldDTO;
+import org.acme.dto.inbound.LandCreationDTO;
+import org.acme.dto.outbound.LandInfoDTO;
+import org.acme.repository.CompanyRepository;
 import org.acme.repository.LandRepository;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class LandService {
 
     @Inject
+    CompanyRepository companyRepository;
+    @Inject
     LandRepository landRepository;
 
-    public String createField (FieldDTO fieldDTO){
-        landRepository.save(Land.builder()
-                .name(fieldDTO.getName())
-                .area(fieldDTO.getArea())
-                .coordinates(fieldDTO.getCoordinates())
-                .localization(fieldDTO.getLocalization())
-                .build());
-        return "Land saved successfully.";
-    }
+    @Transactional
+    public Integer createLand(LandCreationDTO landCreationDTO) {
+        Optional<Company> company = this.companyRepository.findById(landCreationDTO.getCompanyId());
+        if (company.isEmpty()) throw new EntityNotFoundException("Company not found!");
 
-    public FieldDTO findById (Integer id){
-        final Land land = landRepository.findById(id)
-                .orElseThrow( ()-> new EntityNotFoundException("Land not found."));
-        return FieldDTO.builder()
-                .fieldID(land.getLandID())
-                .name(land.getName())
-                .area(land.getArea())
-                .coordinates(land.getCoordinates())
-                .localization(land.getLocalization())
+        Land land = Land.builder().name(landCreationDTO.getName())
+                .area(landCreationDTO.getArea())
+                .company(company.get())
                 .build();
+
+        this.landRepository.save(land);
+        return land.getLandId();
     }
 
-    public List<FieldDTO> listAllFields(){
-        return landRepository.findAll()
-                .stream()
-                .map(land -> FieldDTO
-                        .builder()
-                        .fieldID(land.getLandID())
-                        .name(land.getName())
-                        .area(land.getArea())
-                        .coordinates(land.getCoordinates())
-                        .localization(land.getLocalization())
-                        .build())
-                .toList();
+    public List<LandInfoDTO> getAllLandsByCompany(Integer companyId) {
+        List<Land> lands = this.landRepository.findByCompany_CompanyId(companyId);
+        List<LandInfoDTO> landInfoDTOS = new ArrayList<>();
+
+        for (Land land : lands) {
+            LandInfoDTO landInfoDTO = LandInfoDTO.builder()
+                    .landId(land.getLandId())
+                    .name(land.getName())
+                    .build();
+            landInfoDTOS.add(landInfoDTO);
+        }
+
+        return landInfoDTOS;
     }
 
-    public String deleteById (Integer id){
+
+    public String deleteById(Integer id) {
         landRepository.deleteById(id);
         return ("Land deleted successfully.");
-    }
-
-    public String save (){
-        landRepository.save(Land.builder().name("field1").area(123).coordinates("bbb").localization("kkk").build());
-        landRepository.save(Land.builder().name("field2").area(555).coordinates("xxx").localization("lll").build());
-        landRepository.save(Land.builder().name("field3").area(567).coordinates("yyy").localization("ççç").build());
-        landRepository.save(Land.builder().name("field4").area(222).coordinates("kkk").localization("hhh").build());
-        return "Fields saved successfully";
     }
 }

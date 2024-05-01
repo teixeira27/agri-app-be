@@ -3,6 +3,7 @@ package org.acme.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Builder
@@ -11,22 +12,25 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name="treatment")
-public class Treatment {
+@Table(name = "treatment")
+public class Treatment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "treatment_seq")
     @SequenceGenerator(name = "treatment_seq", sequenceName = "db.treatment_seq", allocationSize = 1)
-    private Integer treatmentID;
+    private Integer treatmentId;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "productId", nullable = false)
     private Product product;
 
     private String description;
-
-    private Date date;  //nao pode ser maior que currentDate
-
+    private Date date;
     private Integer securityDays;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "cultureId")
+    private Culture culture;
 
     // historico de estados de uma cultura
     // sempre que se der update numa cultura é adicionado ao historico também

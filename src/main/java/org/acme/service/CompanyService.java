@@ -3,56 +3,61 @@ package org.acme.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.acme.domain.Collaborator;
 import org.acme.domain.Company;
-import org.acme.dto.CompanyDTO;
+import org.acme.dto.inbound.CompanyCreationDTO;
+import org.acme.dto.inbound.CompanyJoinDTO;
 import org.acme.repository.CompanyRepository;
+
 import java.util.List;
 
 @ApplicationScoped
 public class CompanyService {
 
     @Inject
+    CollaboratorService collaboratorService;
+
+    @Inject
     CompanyRepository companyRepository;
 
-    public String createCompany (CompanyDTO companyDTO){
-        companyRepository.save(Company.builder()
-                .name(companyDTO.getName())
-                .VAT(companyDTO.getVAT())
-                .build());
-        return "Company created successfully.";
-    }
-    public CompanyDTO findById (Integer id){
-        final Company company = companyRepository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException ("Company not found."));
-        return CompanyDTO.builder()
-                .companyID(company.getCompanyID())
-                .name(company.getName())
-                .VAT(company.getVAT())
+    @Transactional
+    public Integer createCompany(CompanyCreationDTO companyCreationDTO) {
+        Collaborator collaborator = this.collaboratorService.findById(companyCreationDTO.getCollaboratorId());
+
+        if (collaborator == null) throw new EntityNotFoundException("Collaborator not found!");
+
+        Company company = Company.builder().name(companyCreationDTO.getName())
+                .vat(companyCreationDTO.getVAT())
+                .pin(companyCreationDTO.getPin())
+                .collaborators(List.of(collaborator))
                 .build();
+
+        collaborator.setCompany(company);
+        this.companyRepository.save(company);
+        return company.getCompanyId();
     }
 
-    public List<CompanyDTO> listAllCompanies (){
-        return companyRepository.findAll()
-                .stream()
-                .map(company -> CompanyDTO
-                        .builder()
-                        .companyID(company.getCompanyID())
-                        .name(company.getName())
-                        .VAT(company.getVAT())
-                        .build())
-                .toList();
+    @Transactional
+    public Integer joinCompany(CompanyJoinDTO companyJoinDTO) {
+        Collaborator collaborator = this.collaboratorService.findById(companyJoinDTO.getCollaboratorId());
+
+        if (collaborator == null) throw new EntityNotFoundException("Collaborator not found!");
+        if (collaborator.getCompany() != null)
+            throw new IllegalArgumentException("Collaborator already has a Company!");
+
+        Company company = this.companyRepository.findByVat(companyJoinDTO.getVat());
+
+        if (companyJoinDTO.getPin() == company.getPin()) {
+            collaborator.setCompany(company);
+            company.getCollaborators().add(collaborator);
+            return company.getCompanyId();
+        } else throw new IllegalArgumentException("Wrong PIN");
     }
 
-    public String deleteById (Integer id){
-        companyRepository.deleteById(id);
+    @Transactional
+    public String deleteById(Integer id) {
+        this.companyRepository.deleteById(id);
         return "Company deleted successfully.";
-    }
-
-    public String save (){
-        companyRepository.save(Company.builder().name("Efacec").VAT(123).build());
-        companyRepository.save(Company.builder().name("NOS").VAT(312).build());
-        companyRepository.save(Company.builder().name("GALP").VAT(321).build());
-        companyRepository.save(Company.builder().name("EDP").VAT(213).build());
-        return "Companies saved successfully";
     }
 }

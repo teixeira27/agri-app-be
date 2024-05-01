@@ -1,4 +1,4 @@
-package org.acme.dto;
+package org.acme.dto.inbound;
 
 import lombok.*;
 
@@ -8,8 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CollaboratorDTO {
-    private int collaboratorID;
+public class CultureCreationDTO {
     private String name;
-    private String role;
+    private Integer landId;
 }

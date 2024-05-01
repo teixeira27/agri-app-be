@@ -5,30 +5,30 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.acme.dto.inbound.TreatmentCreationDTO;
-import org.acme.service.TreatmentService;
+import org.acme.dto.inbound.LandCreationDTO;
+import org.acme.service.LandService;
 
-@Path("treatment")
-public class TreatmentController {
+@Path("land")
+public class LandController {
 
     @Inject
-    TreatmentService treatmentService;
+    LandService landService;
 
     @POST
     @Path("/create")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createTreatment(TreatmentCreationDTO treatmentCreationDTO) {
-        return Response.ok(this.treatmentService.createTreatment(treatmentCreationDTO)).build();
+    public Response createLand(LandCreationDTO landCreationDTO) {
+        return Response.ok(this.landService.createLand(landCreationDTO)).build();
     }
 
     @GET
-    @Path("/culture/{id}")
+    @Path("/company/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllTreatmentsByCulture(@PathParam("id") Integer id) {
-        return Response.ok(this.treatmentService.getAllTreatmentsByCulture(id)).build();
+    public Response getAllLandsByCompany(@PathParam("id") Integer id) {
+        return Response.ok(this.landService.getAllLandsByCompany(id)).build();
     }
 
     @GET
@@ -36,6 +36,7 @@ public class TreatmentController {
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id) {
-        return treatmentService.deleteById(id);
+        return landService.deleteById(id);
     }
+
 }

@@ -4,9 +4,10 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.acme.dto.CollaboratorDTO;
+import jakarta.ws.rs.core.Response;
+import org.acme.domain.Collaborator;
+import org.acme.dto.inbound.CollaboratorCreationDTO;
 import org.acme.service.CollaboratorService;
-import java.util.List;
 
 @Path("collaborator")
 public class CollaboratorController {
@@ -14,35 +15,28 @@ public class CollaboratorController {
     @Inject
     CollaboratorService collaboratorService;
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @POST
+    @Path("/create")
     @RolesAllowed("USER")
-    public List<CollaboratorDTO> listAllCollaborators(){
-        return collaboratorService.listAllCollaborators();
-    }
-
-    @GET
-    @Path("/save")
-    @RolesAllowed("USER")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public String saveCollaborators(){
-        return collaboratorService.save();
+    public Response createCollaborator(CollaboratorCreationDTO collaboratorCreationDTO) {
+        return Response.ok(collaboratorService.createCollaborator(collaboratorCreationDTO)).build();
     }
 
     @GET
     @Path("{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
-    public String listById (@PathParam("id") Integer id){
-        return collaboratorService.findById(id).toString();
+    public Collaborator listById(@PathParam("id") Integer id) {     // create a converter to send a DTO
+        return collaboratorService.findById(id);
     }
 
     @GET
     @Path("delete/{id}")
     @RolesAllowed("USER")
-
     @Produces(MediaType.APPLICATION_JSON)
-    public String deleteById(@PathParam("id") Integer id){
+    public String deleteById(@PathParam("id") Integer id) {
         return collaboratorService.deleteById(id);
     }
 }
