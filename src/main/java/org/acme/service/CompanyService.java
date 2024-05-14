@@ -28,7 +28,7 @@ public class CompanyService {
         if (collaborator == null) throw new EntityNotFoundException("Collaborator not found!");
 
         Company company = Company.builder().name(companyCreationDTO.getName())
-                .vat(companyCreationDTO.getVAT())
+                .vat(companyCreationDTO.getVat())
                 .pin(companyCreationDTO.getPin())
                 .collaborators(List.of(collaborator))
                 .build();

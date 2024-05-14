@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 public class CompanyCreationDTO {
     private String name;
-    private long VAT;
+    private long vat;
     private int pin;
     private Integer collaboratorId;
 }
