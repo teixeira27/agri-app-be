@@ -52,9 +52,8 @@ public class LandService {
         return landInfoDTOS;
     }
 
-
     public String deleteById(Integer id) {
-        landRepository.deleteById(id);
+        this.landRepository.deleteById(id);
         return ("Land deleted successfully.");
     }
 }

@@ -34,4 +34,5 @@ public class Culture implements Serializable {
 
     @OneToMany(mappedBy = "culture", fetch = FetchType.EAGER)
     private List<Treatment> treatments;
+
 }
