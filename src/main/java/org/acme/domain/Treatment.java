@@ -32,6 +32,4 @@ public class Treatment implements Serializable {
     @JoinColumn(name = "cultureId")
     private Culture culture;
 
-    // historico de estados de uma cultura
-    // sempre que se der update numa cultura é adicionado ao historico também
 }
