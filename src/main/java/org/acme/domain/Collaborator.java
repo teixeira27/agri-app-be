@@ -16,18 +16,20 @@ import java.io.Serializable;
 @Table(name = "collaborator")
 public class Collaborator implements Serializable {
 
-
-    public String email;
-    public String password;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "collaborator_seq")
     @SequenceGenerator(name = "collaborator_seq", sequenceName = "db.collaborator_seq", allocationSize = 1)
     private Integer collaboratorId;
+
     private String name;
+    public String email;
+    public String password;
+    private String role;
+    private String pin;
+    private Boolean verified;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "companyId")
     private Company company;
-
-    private String role;
 
 }

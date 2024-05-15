@@ -1,5 +1,6 @@
 package org.acme.controller;
 
+import io.smallrye.common.annotation.Blocking;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
@@ -7,6 +8,8 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.dto.inbound.CollaboratorCreationDTO;
 import org.acme.dto.inbound.CollaboratorLoginDTO;
+import org.acme.dto.inbound.EmailVerificationDTO;
+import org.acme.dto.outbound.CollaboratorInfoDTO;
 import org.acme.dto.outbound.LoginInfoDTO;
 import org.acme.service.CollaboratorService;
 
@@ -18,11 +21,25 @@ public class CollaboratorController {
 
     @POST
     @Path("/register")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Blocking
     public Response createAuth(CollaboratorCreationDTO requestDTO) {
         try {
-            String authToken = collaboratorService.createCollaborator(requestDTO);
-            return Response.ok(authToken).build();
+            CollaboratorInfoDTO result = collaboratorService.createCollaborator(requestDTO);
+            return Response.ok(result).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
+
+    @POST
+    @Path("/verify")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response verifyEmail(EmailVerificationDTO requestDTO){
+        try {
+            return Response.ok(collaboratorService.verifyEmail(requestDTO)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
@@ -30,7 +47,8 @@ public class CollaboratorController {
 
     @POST
     @Path("/login")
-    @Produces(MediaType.TEXT_PLAIN)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response authenticate(CollaboratorLoginDTO requestDTO) {
 
         try {

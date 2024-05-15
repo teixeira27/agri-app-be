@@ -17,6 +17,8 @@ CREATE TABLE db.collaborator
     email          VARCHAR(255),
     password       VARCHAR(255),
     role           VARCHAR(255),
+    pin            VARCHAR(255),
+    verified       BOOLEAN DEFAULT FALSE,
     companyID      INT,
     FOREIGN KEY (companyID) REFERENCES company (companyID)
 );
