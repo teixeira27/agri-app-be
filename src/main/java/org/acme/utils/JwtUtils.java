@@ -1,4 +1,4 @@
-package authentication.utils;
+package org.acme.utils;
 
 import io.smallrye.jwt.build.Jwt;
 import io.smallrye.jwt.build.JwtClaimsBuilder;

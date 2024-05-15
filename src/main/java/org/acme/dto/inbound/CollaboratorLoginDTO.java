@@ -1,5 +1,6 @@
 package org.acme.dto.inbound;
 
+
 import lombok.*;
 
 @Data
@@ -8,8 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CollaboratorCreationDTO {
-    private String name;
+public class CollaboratorLoginDTO {
     private String email;
     private String password;
 }

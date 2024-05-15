@@ -5,8 +5,9 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.acme.domain.Collaborator;
 import org.acme.dto.inbound.CollaboratorCreationDTO;
+import org.acme.dto.inbound.CollaboratorLoginDTO;
+import org.acme.dto.outbound.LoginInfoDTO;
 import org.acme.service.CollaboratorService;
 
 @Path("collaborator")
@@ -16,20 +17,28 @@ public class CollaboratorController {
     CollaboratorService collaboratorService;
 
     @POST
-    @Path("/create")
-    @RolesAllowed("USER")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createCollaborator(CollaboratorCreationDTO collaboratorCreationDTO) {
-        return Response.ok(collaboratorService.createCollaborator(collaboratorCreationDTO)).build();
+    @Path("/register")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response createAuth(CollaboratorCreationDTO requestDTO) {
+        try {
+            String authToken = collaboratorService.createCollaborator(requestDTO);
+            return Response.ok(authToken).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
     }
 
-    @GET
-    @Path("{id}")
-    @RolesAllowed("USER")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Collaborator listById(@PathParam("id") Integer id) {     // create a converter to send a DTO
-        return collaboratorService.findById(id);
+    @POST
+    @Path("/login")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response authenticate(CollaboratorLoginDTO requestDTO) {
+
+        try {
+            LoginInfoDTO loginInfoDTO = collaboratorService.verifyCollaborator(requestDTO);
+            return Response.ok(loginInfoDTO).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
     }
 
     @GET
