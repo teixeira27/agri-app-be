@@ -82,6 +82,7 @@ public class CollaboratorService {
         } else throw new EntityNotFoundException("User doesn't exist!");
     }
 
+    @Transactional
     public boolean resetPassword(ResetPasswordDTO requestDTO) {
         Collaborator user = findByEmail(requestDTO.getEmail());
         if (user != null) {
@@ -95,6 +96,7 @@ public class CollaboratorService {
         return false;
     }
 
+    @Transactional
     public boolean newPassword(NewPasswordDTO requestDTO) {
         Collaborator user = this.findById(requestDTO.getCollaboratorId());
         if (Objects.equals(user.getPin(), requestDTO.getPin())) {
