@@ -6,9 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.acme.dto.inbound.CollaboratorCreationDTO;
-import org.acme.dto.inbound.CollaboratorLoginDTO;
-import org.acme.dto.inbound.EmailVerificationDTO;
+import org.acme.dto.inbound.*;
 import org.acme.dto.outbound.CollaboratorInfoDTO;
 import org.acme.dto.outbound.LoginInfoDTO;
 import org.acme.service.CollaboratorService;
@@ -50,10 +48,33 @@ public class CollaboratorController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response authenticate(CollaboratorLoginDTO requestDTO) {
-
         try {
             LoginInfoDTO loginInfoDTO = collaboratorService.verifyCollaborator(requestDTO);
             return Response.ok(loginInfoDTO).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
+
+    @POST
+    @Path("/resetPassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response resetPassword(ResetPasswordDTO requestDTO) {
+        try {
+            return Response.ok(collaboratorService.resetPassword(requestDTO)).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
+
+    @POST
+    @Path("/newPassword")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response newPassword(NewPasswordDTO requestDTO) {
+        try {
+            return Response.ok(collaboratorService.newPassword(requestDTO)).build();
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }

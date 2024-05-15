@@ -11,9 +11,7 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Collaborator;
-import org.acme.dto.inbound.CollaboratorCreationDTO;
-import org.acme.dto.inbound.CollaboratorLoginDTO;
-import org.acme.dto.inbound.EmailVerificationDTO;
+import org.acme.dto.inbound.*;
 import org.acme.dto.outbound.CollaboratorInfoDTO;
 import org.acme.dto.outbound.LoginInfoDTO;
 import org.acme.repository.CollaboratorRepository;
@@ -28,6 +26,10 @@ public class CollaboratorService {
 
     private static final Random random = new Random();
     public static final int PIN_LENGTH = 6;
+
+    public static final String VERIFY_MESSAGE = "To verify your account, please insert this PIN ";
+    public static final String RESET_MESSAGE = "To reset your password, please insert this PIN ";
+
     @Inject
     CollaboratorRepository collaboratorRepository;
 
@@ -49,7 +51,8 @@ public class CollaboratorService {
                     .pin(pin)
                     .verified(false)
                     .build();
-            this.mailSender(requestDTO.getEmail(), pin);
+            String context = "verify";
+            this.mailSender(requestDTO.getEmail(), pin, context);
             this.collaboratorRepository.save(collaborator);
             return CollaboratorInfoDTO.builder()
                     .collaboratorId(collaborator.getCollaboratorId())
@@ -79,6 +82,30 @@ public class CollaboratorService {
         } else throw new EntityNotFoundException("User doesn't exist!");
     }
 
+    public boolean resetPassword(ResetPasswordDTO requestDTO) {
+        Collaborator user = findByEmail(requestDTO.getEmail());
+        if (user != null) {
+            String pin = this.generatePin();
+            String context = "reset";
+            user.setPin(pin);
+            this.collaboratorRepository.save(user);
+            this.mailSender(requestDTO.getEmail(), pin, context);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean newPassword(NewPasswordDTO requestDTO) {
+        Collaborator user = this.findById(requestDTO.getCollaboratorId());
+        if (Objects.equals(user.getPin(), requestDTO.getPin())) {
+            user.setPassword(BcryptUtil.bcryptHash(requestDTO.getNewPassword()));
+            user.setPin(null);
+            this.collaboratorRepository.save(user);
+            return true;
+        }
+        return false;
+    }
+
     private Collaborator findByEmail(String email) {
         try {
             return entityManager.createQuery("SELECT u FROM Collaborator u WHERE u.email = :email", Collaborator.class)
@@ -99,9 +126,15 @@ public class CollaboratorService {
         return ("Collaborator deleted successfully.");
     }
 
-    private void mailSender(String email, String pin) {
-        this.mailer.send(Mail.withText(email, "Agri App Verification Account",
-                "To verify your account, please insert this PIN " + pin + " in the app."));
+    private void mailSender(String email, String pin, String context) {
+        if (context.equals("reset")) {
+            this.mailer.send(Mail.withText(email, "Agri App Verification Account",
+                    VERIFY_MESSAGE + pin + " in the app."));
+        }else if (context.equals("verify")) {
+            this.mailer.send(Mail.withText(email, "Agri App Verification Account",
+                    RESET_MESSAGE + pin + " in the app."));
+        }
+
     }
 
     private String generatePin() {
