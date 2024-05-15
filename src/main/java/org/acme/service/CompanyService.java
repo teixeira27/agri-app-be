@@ -8,6 +8,7 @@ import org.acme.domain.Collaborator;
 import org.acme.domain.Company;
 import org.acme.dto.inbound.CompanyCreationDTO;
 import org.acme.dto.inbound.CompanyJoinDTO;
+import org.acme.dto.outbound.CompanyInfoDTO;
 import org.acme.repository.CompanyRepository;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class CompanyService {
     CompanyRepository companyRepository;
 
     @Transactional
-    public Integer createCompany(CompanyCreationDTO companyCreationDTO) {
+    public CompanyInfoDTO createCompany(CompanyCreationDTO companyCreationDTO) {
         Collaborator collaborator = this.collaboratorService.findById(companyCreationDTO.getCollaboratorId());
 
         if (collaborator == null) throw new EntityNotFoundException("Collaborator not found!");
@@ -35,11 +36,16 @@ public class CompanyService {
 
         collaborator.setCompany(company);
         this.companyRepository.save(company);
-        return company.getCompanyId();
+
+        return CompanyInfoDTO.builder()
+                .name(company.getName())
+                .vat(company.getVat())
+                .companyId(company.getCompanyId())
+                .build();
     }
 
     @Transactional
-    public Integer joinCompany(CompanyJoinDTO companyJoinDTO) {
+    public CompanyInfoDTO joinCompany(CompanyJoinDTO companyJoinDTO) {
         Collaborator collaborator = this.collaboratorService.findById(companyJoinDTO.getCollaboratorId());
 
         if (collaborator == null) throw new EntityNotFoundException("Collaborator not found!");
@@ -51,7 +57,12 @@ public class CompanyService {
         if (companyJoinDTO.getPin() == company.getPin()) {
             collaborator.setCompany(company);
             company.getCollaborators().add(collaborator);
-            return company.getCompanyId();
+
+            return CompanyInfoDTO.builder()
+                    .name(company.getName())
+                    .vat(company.getVat())
+                    .companyId(company.getCompanyId())
+                    .build();
         } else throw new IllegalArgumentException("Wrong PIN");
     }
 
