@@ -15,6 +15,7 @@ import org.acme.dto.inbound.*;
 import org.acme.dto.outbound.CollaboratorInfoDTO;
 import org.acme.dto.outbound.LoginInfoDTO;
 import org.acme.repository.CollaboratorRepository;
+import org.acme.utils.EmailValidator;
 import org.acme.utils.JwtUtils;
 
 import java.util.Objects;
@@ -44,19 +45,23 @@ public class CollaboratorService {
         String pin = this.generatePin();
         Collaborator user = findByEmail(requestDTO.getEmail());
         if (user == null) {
-            Collaborator collaborator = Collaborator.builder()
-                    .name(requestDTO.getName())
-                    .email(requestDTO.getEmail())
-                    .password(BcryptUtil.bcryptHash(requestDTO.getPassword()))
-                    .pin(pin)
-                    .verified(false)
-                    .build();
-            String context = "verify";
-            this.mailSender(requestDTO.getEmail(), pin, context);
-            this.collaboratorRepository.save(collaborator);
-            return CollaboratorInfoDTO.builder()
-                    .collaboratorId(collaborator.getCollaboratorId())
-                    .build();
+            if (EmailValidator.isValidEmail(requestDTO.getEmail())){
+                Collaborator collaborator = Collaborator.builder()
+                        .name(requestDTO.getName())
+                        .email(requestDTO.getEmail())
+                        .password(BcryptUtil.bcryptHash(requestDTO.getPassword()))
+                        .pin(pin)
+                        .verified(false)
+                        .build();
+                String context = "verify";
+                this.mailSender(requestDTO.getEmail(), pin, context);
+                this.collaboratorRepository.save(collaborator);
+                return CollaboratorInfoDTO.builder()
+                        .collaboratorId(collaborator.getCollaboratorId())
+                        .build();
+            }
+            else throw new IllegalArgumentException("Invalid email!");
+
         } else throw new EntityNotFoundException("User already exist!");
     }
 
@@ -129,14 +134,13 @@ public class CollaboratorService {
     }
 
     private void mailSender(String email, String pin, String context) {
-        if (context.equals("reset")) {
+        if (context.equals("verify")) {
             this.mailer.send(Mail.withText(email, "Agri App Verification Account",
                     VERIFY_MESSAGE + pin + " in the app."));
-        }else if (context.equals("verify")) {
+        }else if (context.equals("reset")) {
             this.mailer.send(Mail.withText(email, "Agri App Verification Account",
                     RESET_MESSAGE + pin + " in the app."));
         }
-
     }
 
     private String generatePin() {

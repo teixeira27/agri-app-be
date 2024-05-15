@@ -27,7 +27,7 @@ public class CollaboratorController {
             CollaboratorInfoDTO result = collaboratorService.createCollaborator(requestDTO);
             return Response.ok(result).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -39,7 +39,7 @@ public class CollaboratorController {
         try {
             return Response.ok(collaboratorService.verifyEmail(requestDTO)).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -52,7 +52,7 @@ public class CollaboratorController {
             LoginInfoDTO loginInfoDTO = collaboratorService.verifyCollaborator(requestDTO);
             return Response.ok(loginInfoDTO).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -64,7 +64,7 @@ public class CollaboratorController {
         try {
             return Response.ok(collaboratorService.resetPassword(requestDTO)).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
@@ -76,7 +76,7 @@ public class CollaboratorController {
         try {
             return Response.ok(collaboratorService.newPassword(requestDTO)).build();
         } catch (Exception e) {
-            return Response.status(Response.Status.UNAUTHORIZED).build();
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
