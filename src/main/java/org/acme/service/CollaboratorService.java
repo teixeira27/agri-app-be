@@ -80,9 +80,11 @@ public class CollaboratorService {
     public LoginInfoDTO verifyCollaborator(CollaboratorLoginDTO requestDTO) throws Exception {
         Collaborator user = findByEmail(requestDTO.getEmail());
         if (user != null && BcryptUtil.matches(requestDTO.getPassword(), user.getPassword())) {
+            int companyId = (user.getCompany() != null) ? user.getCompany().getCompanyId() : 0;
             return LoginInfoDTO.builder()
                     .collaboratorId(user.getCollaboratorId())
                     .token(JwtUtils.generateToken(requestDTO.getEmail()))
+                    .companyId(companyId)
                     .build();
         } else throw new EntityNotFoundException("User doesn't exist!");
     }

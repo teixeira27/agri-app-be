@@ -11,4 +11,5 @@ import lombok.*;
 public class LoginInfoDTO {
     private String token;
     private Integer collaboratorId;
+    private Integer companyId;
 }
