@@ -20,9 +20,10 @@ public class Land implements Serializable {
     private Integer landId;
 
     private String name;
-    private int area;
-    private String coordinates;
-    private String localization;
+    private Integer area;
+    private Double latitude;
+    private Double longitude;
+    private String location;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "companyId")

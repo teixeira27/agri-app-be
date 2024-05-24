@@ -29,6 +29,9 @@ public class LandService {
         if (company.isEmpty()) throw new EntityNotFoundException("Company not found!");
 
         Land land = Land.builder().name(landCreationDTO.getName())
+                .latitude(landCreationDTO.getLatitude())
+                .longitude(landCreationDTO.getLongitude())
+                .location(landCreationDTO.getLocation())
                 .area(landCreationDTO.getArea())
                 .company(company.get())
                 .build();

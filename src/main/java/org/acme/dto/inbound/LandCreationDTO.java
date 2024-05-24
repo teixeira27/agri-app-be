@@ -12,5 +12,8 @@ import lombok.*;
 public class LandCreationDTO {
     private String name;
     private Integer area;
+    private Double latitude;
+    private Double longitude;
+    private String location;
     private Integer companyId;
 }
