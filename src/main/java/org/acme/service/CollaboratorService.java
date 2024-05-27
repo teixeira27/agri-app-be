@@ -90,17 +90,17 @@ public class CollaboratorService {
     }
 
     @Transactional
-    public boolean resetPassword(ResetPasswordDTO requestDTO) {
+    public CollaboratorInfoDTO resetPassword(ResetPasswordDTO requestDTO) {
         Collaborator user = findByEmail(requestDTO.getEmail());
-        if (user != null) {
-            String pin = this.generatePin();
-            String context = "reset";
-            user.setPin(pin);
-            this.collaboratorRepository.save(user);
-            this.mailSender(requestDTO.getEmail(), pin, context);
-            return true;
-        }
-        return false;
+        if (user == null) throw new EntityNotFoundException("User doesn't exist!");
+
+        String pin = this.generatePin();
+        String context = "reset";
+        user.setPin(pin);
+        this.collaboratorRepository.save(user);
+        this.mailSender(requestDTO.getEmail(), pin, context);
+
+        return CollaboratorInfoDTO.builder().collaboratorId(user.getCollaboratorId()).build();
     }
 
     @Transactional
