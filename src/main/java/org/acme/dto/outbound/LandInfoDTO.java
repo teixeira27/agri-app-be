@@ -11,4 +11,5 @@ import lombok.*;
 public class LandInfoDTO {
     private Integer landId;
     private String name;
+    private String location;
 }

@@ -50,6 +50,7 @@ public class LandService {
             LandInfoDTO landInfoDTO = LandInfoDTO.builder()
                     .landId(land.getLandId())
                     .name(land.getName())
+                    .location(land.getLocation())
                     .build();
             landInfoDTOS.add(landInfoDTO);
         }
