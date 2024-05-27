@@ -20,10 +20,7 @@ public class Treatment implements Serializable {
     @SequenceGenerator(name = "treatment_seq", sequenceName = "db.treatment_seq", allocationSize = 1)
     private Integer treatmentId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "productId", nullable = false)
-    private Product product;
-
+    private String productName;
     private String description;
     private Date date;
     private Integer securityDays;

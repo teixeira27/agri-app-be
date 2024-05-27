@@ -11,7 +11,6 @@ import lombok.*;
 public class TreatmentCreationDTO {
     private String productName;
     private String description;
-    private String date;
     private Integer securityDays;
     private Integer cultureId;
 }

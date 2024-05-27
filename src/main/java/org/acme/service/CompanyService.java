@@ -24,8 +24,15 @@ public class CompanyService {
 
     @Transactional
     public CompanyInfoDTO createCompany(CompanyCreationDTO companyCreationDTO) {
-        Collaborator collaborator = this.collaboratorService.findById(companyCreationDTO.getCollaboratorId());
+        long vat = companyCreationDTO.getVat();
+        int length = (int) (Math.log10(vat) + 1);
+        if (length != 9) throw new IllegalArgumentException("Vat must have 9 digits!");
 
+        int pin = companyCreationDTO.getPin();
+        length = (int)   (Math.log10(pin) + 1);
+        if (length < 4)  throw new IllegalArgumentException("Pin must have at least 4 digits!");
+
+        Collaborator collaborator = this.collaboratorService.findById(companyCreationDTO.getCollaboratorId());
         if (collaborator == null) throw new EntityNotFoundException("Collaborator not found!");
 
         Company company = Company.builder().name(companyCreationDTO.getName())

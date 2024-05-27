@@ -2,8 +2,6 @@ package org.acme.dto.outbound;
 
 import lombok.*;
 
-import java.util.Date;
-
 @Data
 @Builder
 @NoArgsConstructor
@@ -13,7 +11,7 @@ import java.util.Date;
 public class TreatmentInfoDTO {
     private String productName;
     private String description;
-    private Date date;
+    private String date;
     private Integer securityDays;
     private Integer treatmentId;
 }

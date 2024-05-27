@@ -5,12 +5,10 @@ import jakarta.inject.Inject;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Culture;
-import org.acme.domain.Product;
 import org.acme.domain.Treatment;
 import org.acme.dto.inbound.TreatmentCreationDTO;
 import org.acme.dto.outbound.TreatmentInfoDTO;
 import org.acme.repository.CultureRepository;
-import org.acme.repository.ProductRepository;
 import org.acme.repository.TreatmentRepository;
 
 import java.time.Instant;
@@ -26,19 +24,13 @@ public class TreatmentService {
     @Inject
     CultureRepository cultureRepository;
 
-    @Inject
-    ProductRepository productRepository;
-
     @Transactional
     public Integer createTreatment(TreatmentCreationDTO treatmentCreationDTO) {
         Optional<Culture> culture = this.cultureRepository.findById(treatmentCreationDTO.getCultureId());
         if (culture.isEmpty()) throw new EntityNotFoundException("Culture not found!");
 
-        Product product = Product.builder().name(treatmentCreationDTO.getProductName()).build();
-        this.productRepository.save(product);
-
         Treatment treatment = Treatment.builder()
-                .product(product)
+                .productName(treatmentCreationDTO.getProductName())
                 .description(treatmentCreationDTO.getDescription())
                 .date(Date.from(Instant.now()))
                 .securityDays(treatmentCreationDTO.getSecurityDays())
@@ -55,8 +47,8 @@ public class TreatmentService {
         for (Treatment treatment : treatments) {
             TreatmentInfoDTO treatmentInfoDTO = TreatmentInfoDTO.builder()
                     .treatmentId(treatment.getTreatmentId())
-                    .productName(treatment.getProduct().getName())
-                    .date(treatment.getDate())
+                    .productName(treatment.getProductName())
+                    .date(treatment.getDate().toString())
                     .description(treatment.getDescription())
                     .securityDays(treatment.getSecurityDays())
                     .build();
