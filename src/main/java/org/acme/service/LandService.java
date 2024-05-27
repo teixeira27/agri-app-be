@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import org.acme.domain.Company;
 import org.acme.domain.Land;
 import org.acme.dto.inbound.LandCreationDTO;
+import org.acme.dto.inbound.LandUpdateDTO;
 import org.acme.dto.outbound.LandInfoDTO;
 import org.acme.repository.CompanyRepository;
 import org.acme.repository.LandRepository;
@@ -55,6 +56,20 @@ public class LandService {
         return landInfoDTOS;
     }
 
+    @Transactional
+    public LandInfoDTO updateLandCoordinates(LandUpdateDTO landUpdateDTO){
+        Optional<Land> optionalLand = this.landRepository.findById(landUpdateDTO.getLandId());
+        if (optionalLand.isEmpty()) throw new EntityNotFoundException("Land not found!");
+
+        Land land = optionalLand.get();
+        land.setLatitude(landUpdateDTO.getLatitude());
+        land.setLongitude(landUpdateDTO.getLongitude());
+        this.landRepository.save(land);
+
+        return LandInfoDTO.builder().landId(land.getLandId()).name(land.getName()).build();
+    }
+
+    @Transactional
     public String deleteById(Integer id) {
         this.landRepository.deleteById(id);
         return ("Land deleted successfully.");

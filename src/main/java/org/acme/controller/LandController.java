@@ -6,6 +6,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.dto.inbound.LandCreationDTO;
+import org.acme.dto.inbound.LandUpdateDTO;
 import org.acme.service.LandService;
 
 @Path("land")
@@ -29,6 +30,15 @@ public class LandController {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllLandsByCompany(@PathParam("id") Integer id) {
         return Response.ok(this.landService.getAllLandsByCompany(id)).build();
+    }
+
+    @PUT
+    @Path("/update")
+    @RolesAllowed("USER")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateLandCoordinates(LandUpdateDTO landUpdateDTO){
+        return Response.ok(this.landService.updateLandCoordinates(landUpdateDTO)).build();
     }
 
     @GET
