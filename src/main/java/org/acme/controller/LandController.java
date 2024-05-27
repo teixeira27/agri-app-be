@@ -32,6 +32,14 @@ public class LandController {
         return Response.ok(this.landService.getAllLandsByCompany(id)).build();
     }
 
+    @GET
+    @Path("/coordinates/{id}")
+    @RolesAllowed("USER")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllLandsCoordinates(@PathParam("id") Integer id){
+        return Response.ok(this.landService.getAllLandsCoordinates(id)).build();
+    }
+
     @PUT
     @Path("/update")
     @RolesAllowed("USER")

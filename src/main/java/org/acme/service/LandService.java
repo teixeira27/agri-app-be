@@ -8,6 +8,7 @@ import org.acme.domain.Company;
 import org.acme.domain.Land;
 import org.acme.dto.inbound.LandCreationDTO;
 import org.acme.dto.inbound.LandUpdateDTO;
+import org.acme.dto.outbound.LandCoordinatesDTO;
 import org.acme.dto.outbound.LandInfoDTO;
 import org.acme.repository.CompanyRepository;
 import org.acme.repository.LandRepository;
@@ -54,6 +55,25 @@ public class LandService {
         }
 
         return landInfoDTOS;
+    }
+
+    public List<LandCoordinatesDTO> getAllLandsCoordinates(Integer companyId) {
+        List<Land> lands = this.landRepository.findByCompany_CompanyId(companyId);
+        List<LandCoordinatesDTO> landCoordinatesDTOS = new ArrayList<>();
+
+        for (Land land: lands){
+            if (land.getLatitude() != null && land.getLongitude() != null)
+            {
+                LandCoordinatesDTO landCoordinatesDTO = LandCoordinatesDTO.builder()
+                        .landId(land.getLandId())
+                        .latitude(land.getLatitude())
+                        .longitude(land.getLongitude())
+                        .build();
+                landCoordinatesDTOS.add(landCoordinatesDTO);
+            }
+        }
+
+        return landCoordinatesDTOS;
     }
 
     @Transactional
