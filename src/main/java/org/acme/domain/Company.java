@@ -24,9 +24,11 @@ public class Company implements Serializable {
     private long vat;
     private int pin;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Collaborator> collaborators;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Land> lands;
 }
