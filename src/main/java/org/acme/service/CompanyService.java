@@ -9,6 +9,7 @@ import org.acme.domain.Company;
 import org.acme.dto.inbound.CompanyCreationDTO;
 import org.acme.dto.inbound.CompanyJoinDTO;
 import org.acme.dto.outbound.CompanyInfoDTO;
+import org.acme.repository.CollaboratorRepository;
 import org.acme.repository.CompanyRepository;
 
 import java.util.List;
@@ -21,6 +22,8 @@ public class CompanyService {
 
     @Inject
     CompanyRepository companyRepository;
+    @Inject
+    CollaboratorRepository collaboratorRepository;
 
     @Transactional
     public CompanyInfoDTO createCompany(CompanyCreationDTO companyCreationDTO) {
@@ -75,6 +78,14 @@ public class CompanyService {
 
     @Transactional
     public String deleteById(Integer id) {
+        Company company = companyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Company not found"));
+
+        List<Collaborator> collaborators = company.getCollaborators();
+        for (Collaborator collaborator : collaborators) {
+            collaborator.setCompany(null);
+            this.collaboratorRepository.save(collaborator);
+        }
         this.companyRepository.deleteById(id);
         return "Company deleted successfully.";
     }
