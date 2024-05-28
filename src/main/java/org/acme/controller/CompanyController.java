@@ -34,7 +34,7 @@ public class CompanyController {
     }
 
     @DELETE
-    @Path("delete/{id}")
+    @Path("/delete/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)
     public String deleteById(@PathParam("id") Integer id) {
