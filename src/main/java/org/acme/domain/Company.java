@@ -30,4 +30,8 @@ public class Company implements Serializable {
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER,
             cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Land> lands;
+
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Note> notes;
 }
