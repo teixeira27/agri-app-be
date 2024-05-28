@@ -32,8 +32,7 @@ public class Culture implements Serializable {
     @JoinColumn(name = "landId")
     private Land land;
 
-    @OneToMany(mappedBy = "culture", fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "culture", fetch = FetchType.EAGER)
     private List<Treatment> treatments;
 
 }
