@@ -28,5 +28,4 @@ public class Treatment implements Serializable {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cultureId")
     private Culture culture;
-
 }

@@ -49,6 +49,7 @@ public class CultureService {
         return cultureInfoDTOS;
     }
 
+    @Transactional
     public String deleteById(Integer id) {
         this.cultureRepository.deleteById(id);
         return ("Culture deleted successfully.");

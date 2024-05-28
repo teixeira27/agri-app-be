@@ -80,7 +80,7 @@ public class CollaboratorController {
         }
     }
 
-    @GET
+    @DELETE
     @Path("delete/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)

@@ -49,7 +49,7 @@ public class LandController {
         return Response.ok(this.landService.updateLandCoordinates(landUpdateDTO)).build();
     }
 
-    @GET
+    @DELETE
     @Path("delete/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)

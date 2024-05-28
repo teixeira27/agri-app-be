@@ -33,7 +33,7 @@ CREATE TABLE db.land
     longitude    FLOAT(53),
     location     VARCHAR(255),
     companyID    INT,
-    FOREIGN KEY (companyID) REFERENCES company (companyID)
+    FOREIGN KEY (companyID) REFERENCES company (companyID) ON DELETE CASCADE
 );
 
 -- Create Culture Table
@@ -44,7 +44,7 @@ CREATE TABLE db.culture
     date        TIMESTAMP,
     description TEXT,
     landID      INT,
-    FOREIGN KEY (landID) REFERENCES land (landID)
+    FOREIGN KEY (landID) REFERENCES land (landID) ON DELETE CASCADE
 );
 
 -- Create Status History Table
@@ -55,7 +55,7 @@ CREATE TABLE db.status_history
     description     TEXT,
     image           OID,
     cultureID       INT,
-    FOREIGN KEY (cultureID) REFERENCES culture (cultureID)
+    FOREIGN KEY (cultureID) REFERENCES culture (cultureID) ON DELETE CASCADE
 );
 
 -- Create Treatment Table
@@ -67,7 +67,7 @@ CREATE TABLE db.treatment
     description  TEXT,
     date         TIMESTAMP,
     securityDays INT,
-    FOREIGN KEY (cultureID) REFERENCES culture (cultureID)
+    FOREIGN KEY (cultureID) REFERENCES culture (cultureID) ON DELETE CASCADE
 );
 
 CREATE SEQUENCE db.collaborator_seq START WITH 1 INCREMENT BY 1;

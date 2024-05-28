@@ -33,7 +33,7 @@ public class CompanyController {
         return Response.ok(this.companyService.joinCompany(companyJoinDTO)).build();
     }
 
-    @GET
+    @DELETE
     @Path("delete/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)

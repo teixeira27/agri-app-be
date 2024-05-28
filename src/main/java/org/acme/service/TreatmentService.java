@@ -57,6 +57,7 @@ public class TreatmentService {
         return treatmentInfoDTOS;
     }
 
+    @Transactional
     public String deleteById(Integer id) {
         treatmentRepository.deleteById(id);
         return ("Treatment deleted successfully.");

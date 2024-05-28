@@ -31,7 +31,7 @@ public class TreatmentController {
         return Response.ok(this.treatmentService.getAllTreatmentsByCulture(id)).build();
     }
 
-    @GET
+    @DELETE
     @Path("delete/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)

@@ -130,6 +130,7 @@ public class CollaboratorService {
                 .orElseThrow(() -> new EntityNotFoundException("Collaborator not found."));
     }
 
+    @Transactional
     public String deleteById(Integer id) {
         collaboratorRepository.deleteById(id);
         return ("Collaborator deleted successfully.");

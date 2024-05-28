@@ -31,7 +31,7 @@ public class CultureController {
         return Response.ok(this.cultureService.getAllCulturesByLand(id)).build();
     }
 
-    @GET
+    @DELETE
     @Path("delete/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)

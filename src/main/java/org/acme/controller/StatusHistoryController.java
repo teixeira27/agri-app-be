@@ -23,7 +23,7 @@ public class StatusHistoryController {
         return Response.ok(this.statusHistoryService.createStatusHistory(statusHistoryCreationDTO)).build();
     }
 
-    @GET
+    @DELETE
     @Path("/status/{id}")
     @RolesAllowed("USER")
     @Produces(MediaType.APPLICATION_JSON)

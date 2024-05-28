@@ -29,6 +29,7 @@ public class Land implements Serializable {
     @JoinColumn(name = "companyId")
     private Company company;
 
-    @OneToMany(mappedBy = "land", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "land", fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Culture> cultures;
 }

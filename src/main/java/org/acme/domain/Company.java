@@ -27,6 +27,7 @@ public class Company implements Serializable {
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private List<Collaborator> collaborators;
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Land> lands;
 }
