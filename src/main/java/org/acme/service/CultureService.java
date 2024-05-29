@@ -11,7 +11,9 @@ import org.acme.dto.outbound.CultureInfoDTO;
 import org.acme.repository.CultureRepository;
 import org.acme.repository.LandRepository;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +30,10 @@ public class CultureService {
         Optional<Land> land = this.landRepository.findById(cultureCreationDTO.getLandId());
         if (land.isEmpty()) throw new EntityNotFoundException("Land not found!");
 
-        Culture culture = Culture.builder().name(cultureCreationDTO.getName())
+        Culture culture = Culture.builder()
+                .name(cultureCreationDTO.getName())
+                .description(cultureCreationDTO.getDescription())
+                .creation(Date.from(Instant.now()))
                 .land(land.get())
                 .build();
         this.cultureRepository.save(culture);
@@ -43,6 +48,8 @@ public class CultureService {
             CultureInfoDTO cultureInfoDTO = CultureInfoDTO.builder()
                     .cultureId(culture.getCultureId())
                     .name(culture.getName())
+                    .description(culture.getDescription())
+                    .creationDate(culture.getCreation().toString())
                     .build();
             cultureInfoDTOS.add(cultureInfoDTO);
         }

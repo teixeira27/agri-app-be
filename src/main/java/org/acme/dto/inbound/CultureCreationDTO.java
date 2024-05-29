@@ -10,5 +10,6 @@ import lombok.*;
 @Setter
 public class CultureCreationDTO {
     private String name;
+    private String description;
     private Integer landId;
 }

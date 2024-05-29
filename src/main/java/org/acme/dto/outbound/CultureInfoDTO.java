@@ -11,4 +11,6 @@ import lombok.*;
 public class CultureInfoDTO {
     private Integer cultureId;
     private String name;
+    private String description;
+    private String creationDate;
 }
