@@ -80,6 +80,14 @@ public class CollaboratorController {
         }
     }
 
+    @GET
+    @Path("/details/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCollaboratorDetails(@PathParam("id") Integer id){
+        return Response.ok(this.collaboratorService.getCollaboratorDetails(id)).build();
+    }
+
     @DELETE
     @Path("/delete/{id}")
     @RolesAllowed("USER")

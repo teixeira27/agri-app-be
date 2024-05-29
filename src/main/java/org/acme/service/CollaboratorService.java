@@ -12,6 +12,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.acme.domain.Collaborator;
 import org.acme.dto.inbound.*;
+import org.acme.dto.outbound.CollaboratorDetailsDTO;
 import org.acme.dto.outbound.CollaboratorInfoDTO;
 import org.acme.dto.outbound.LoginInfoDTO;
 import org.acme.repository.CollaboratorRepository;
@@ -19,6 +20,7 @@ import org.acme.utils.EmailValidator;
 import org.acme.utils.JwtUtils;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 
@@ -128,6 +130,20 @@ public class CollaboratorService {
     public Collaborator findById(Integer id) {
         return collaboratorRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Collaborator not found."));
+    }
+
+    public CollaboratorDetailsDTO getCollaboratorDetails(Integer id){
+        Optional<Collaborator> collaborator = this.collaboratorRepository.findById(id);
+        if (collaborator.isEmpty()) throw new EntityNotFoundException("Collaborator not found.");
+
+        Collaborator col = collaborator.get();
+
+        return CollaboratorDetailsDTO.builder()
+                .name(col.getName())
+                .email(col.getEmail())
+                .companyName(col.getCompany().getName())
+                .Vat(col.getCompany().getVat())
+                .build();
     }
 
     @Transactional
