@@ -59,6 +59,7 @@ public class NoteService {
 
         for (Note note : notes){
             NoteInfoDTO noteInfoDTO = NoteInfoDTO.builder()
+                    .noteId(note.getNoteId())
                     .collaboratorName(note.getCollaborator().getName())
                     .title(note.getTitle())
                     .description(note.getDescription())

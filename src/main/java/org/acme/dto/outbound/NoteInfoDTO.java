@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 public class NoteInfoDTO {
+    private Integer noteId;
     private String title;
     private String description;
     private String collaboratorName;
